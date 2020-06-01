@@ -1,0 +1,33 @@
+﻿//add customized instance names in setWarningPercent accordingly
+{
+  "excludePattern": "redis|\\.com",
+  "cpuWarningPercent": 5,
+  "setWarningPercent": [
+    {
+      "name": "test",
+      "cpuWarningPercent": 1
+    }
+  ],
+  "cpuCriticalPercent": 20,
+  "memoryWarningPercent": 90,
+  "memoryCriticalPercent": 90,
+  "diskWarningPercent": 85,
+  "diskCriticalPercent": 95,
+  "showVolumePerformance": true,
+  "categories": [
+    {
+      "name": "Database Servers",
+      "pattern": "-sql",
+      "cpuWarningPercent": 20,
+      "memoryWarningPercent": 98,
+      "memoryCriticalPercent": 99.2,
+      "primaryInterfacePattern": "-TEAM$"
+    }
+  ],
+  "perNodeSettings": [
+    {
+      "pattern": "EDGE\\d+ \\(INAP\\)",
+      "primaryInterfacePattern": "GigabitEthernet0/0/0"
+    }
+  ]
+}

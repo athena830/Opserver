@@ -29,7 +29,7 @@
   "setWarningPercent": [
     {
       "name": "test",
-      "cpuWarningPercent": 1
+      "cpuWarningPercent": 40
     }
   ],
   "cpuCriticalPercent": 60, // How much CPU usage before a node is treated as critical

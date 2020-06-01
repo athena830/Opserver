@@ -902,6 +902,30 @@ Status.SQL = (function () {
             window.location.hash = $('.ag-node-name a', this)[0].hash;
         }).on('click', '.js-next-collapsible', function () {
             window.location.hash = window.location.hash.replace(/\/tables\/.*/, '/tables').replace(/\/views\/.*/, '/views').replace(/\/storedprocedures\/.*/, '/storedprocedures');
+        }).on('click', '.sql-kill-spid', function () {
+            var spid = $(this).data('spid');
+            if (!confirm('Really kill ' + spid + ' ?'))
+                return false;
+
+            var $link = $(this).addClass('loading');
+            $.ajax('/sql/kill-spid', {
+                type: 'POST',
+                data: {
+                    node: Status.SQL.options.node,
+                    spid: spid
+                },
+                success: function (data, status, xhr) {
+                    if (data === true) {
+                        location.reload();
+                    } else {
+                        $link.removeClass('loading').errorPopupFromJSON(xhr, 'An error occurred kill this spid.');
+                    }
+                },
+                error: function (xhr) {
+                    $link.removeClass('loading').errorPopupFromJSON(xhr, 'An error occurred kill this spid.');
+                }
+            });
+            return false;
         });
     }
 
@@ -1251,11 +1275,11 @@ Status.Exceptions = (function () {
         });
 
         $(document).on('keydown', function (e) {
-            if (e.keyCode == 16) { // shift
+            if (e.keyCode === 16) { // shift
                 $('.js-table-exceptions').addClass('no-select');
             }
         }).on('keyup', function (e) {
-            if (e.keyCode == 16) { // shift
+            if (e.keyCode === 16) { // shift
                 $('.js-table-exceptions').removeClass('no-select');
             }
         });
@@ -1337,16 +1361,16 @@ Status.Exceptions = (function () {
             type: 'numeric'
         });
 
+        function clearPreview(parent) {
+            lastId = null;
+            $('.error-preview-popup', parent).fadeOut(125, function () { $(this).remove(); });
+        }
+
         /* Error previews */
         if (options.enablePreviews) {
             var activePreview,
                 lastId,
                 previewTimer = 0;
-
-            function clearPreview(parent) {
-                lastId = null;
-                $('.error-preview-popup', parent).fadeOut(125, function () { $(this).remove(); });
-            }
 
             $('.js-content').on({
                 mouseenter: function (e) {
@@ -1354,7 +1378,7 @@ Status.Exceptions = (function () {
                         url = jThis.find('a').attr('href').replace('/detail', '/preview'),
                         id = jThis.closest('tr').data('id');
 
-                    if (lastId == id) {
+                    if (lastId === id) {
                         // We're moved between eye and popup
                         // Due to position: absolute, mouse events fire here, unfortunately
                         clearTimeout(previewTimer);

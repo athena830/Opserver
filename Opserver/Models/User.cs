@@ -31,6 +31,11 @@ namespace StackExchange.Opserver.Models
         private Roles? _role;
         public Roles? RawRoles => _role;
 
+        public bool IsInRole(Roles roles)
+        {
+            return (Role & roles) != Roles.None || Role.HasFlag(Roles.GlobalAdmin);
+        }
+
         /// <summary>
         /// Returns this user's role on the current site.
         /// </summary>

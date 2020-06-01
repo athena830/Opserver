@@ -193,5 +193,23 @@ namespace StackExchange.Opserver.Data.SQL
             }, duration, staleDuration);
 
         public override string ToString() => Name;
+
+        public async Task<bool> KillSpid(int spId)
+        {
+            try
+            {
+                using (var conn = await GetConnectionAsync())
+                {
+                    await conn.ExecuteAsync(string.Format("kill {0};", spId));
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Current.LogException(ex);
+                return false;
+            }
+        }
+
     }
 }
