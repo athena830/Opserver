@@ -78,6 +78,7 @@ else
                 @SortLink(SQLInstance.TopSorts.ExecutionsPerMinute, "Execs/min")
                 @SortLink(SQLInstance.TopSorts.LastExecutionTime, "Last Exec")
                 <th>Database</th>
+                <th>Stored Procedure</th>
                 <th>Query</th>
             </tr>
         </thead>
@@ -96,6 +97,7 @@ else
                 <td>@o.ExecutionsPerMinute.ToString("0.00")</td>
                 <td>@o.LastExecutionTime.ToRelativeTimeSpan()</td>
                 <td>@o.CompiledOnDatabase</td>
+                <td class="query-col" title="@o.StoredProcedure">@o.StoredProcedure.TruncateWithEllipsis(80)</td>
                 <td class="query-col" title="@o.QueryText">@o.QueryText.TruncateWithEllipsis(80)</td>
             </tr>
         }

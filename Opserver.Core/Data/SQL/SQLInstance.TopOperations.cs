@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Dapper;
 using StackExchange.Opserver.Data.SQL.QueryPlans;
@@ -70,6 +71,16 @@ namespace StackExchange.Opserver.Data.SQL
             public long LastReturnedRows { get; internal set; }
             public string CompiledOnDatabase { get; internal set; }
 
+            private string _StoredProcedure;
+            public string StoredProcedure
+            {
+                get
+                {
+                    return (Regex.IsMatch(_StoredProcedure, @"\[.*\]") ? _StoredProcedure : "Dynamic Query");
+                }
+                internal set { _StoredProcedure = value; }
+            }
+
             public string ReadablePlanHandle => string.Concat(PlanHandle.Select(x => x.ToString("X2")));
 
             public ShowPlanXML GetShowPlanXML()
@@ -96,6 +107,10 @@ SELECT AvgCPU, AvgDuration, AvgReads, AvgCPUPerMinute,
                    ELSE StatementEndOffset
                    END - StatementStartOffset) / 2) + 1) AS QueryText,
         st.Text FullText,
+        SUBSTRING(st.text, 
+			        CHARINDEX('create procedure [dbo].[', st.text) + 23,
+			        CHARINDEX(']', SUBSTRING(SUBSTRING(st.text, CHARINDEX('create procedure [dbo].[', st.text) , 200), 24, 200))
+		        ) AS StoredProcedure,
         query_plan AS QueryPlan,
         PlanHandle,
         StatementStartOffset,
