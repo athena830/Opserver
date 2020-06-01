@@ -25,6 +25,13 @@
   /* General dashboard UI settings */
   "excludePattern": "redis|\\.com", // (Optioal) Regex node name pattern to exclude from the dashboard
   "cpuWarningPercent": 50, // How much CPU usage before a node is treated as a warning
+  //add customized instance names in setWarningPercent accordingly
+  "setWarningPercent": [
+    {
+      "name": "test",
+      "cpuWarningPercent": 1
+    }
+  ],
   "cpuCriticalPercent": 60, // How much CPU usage before a node is treated as critical
   "memoryWarningPercent": 90, // How much memory usage before a node is treated as a warning
   "memoryCriticalPercent": 95, // How much memory usage before a node is treated as critical

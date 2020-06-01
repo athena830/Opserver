@@ -283,6 +283,19 @@
                             });
                         }
                     }
+
+                    var audioAlerts = $(html).filter('.audioAlerts').children();
+                    if (audioAlerts.length > 0) {
+                        var audioIndex = 0;
+                        var audio = new Audio(audioAlerts[audioIndex].children[0].src);
+                        audio.play();
+                        audio.onended = function () {
+                            if (++audioIndex < audioAlerts.length) {
+                                audio.src = audioAlerts[audioIndex].children[0].src;
+                                audio.play();
+                            }
+                        };
+                    }
                 }).fail(Status.UI.ajaxError);
             }, Status.options.HeaderRefresh * 1000);
         }

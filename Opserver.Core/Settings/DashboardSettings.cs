@@ -19,6 +19,8 @@ namespace StackExchange.Opserver
         public NodeSettings GetNodeSettings(string node) =>
             PerNodeSettings?.FirstOrDefault(n => n.PatternRegex.IsMatch(node)) ?? NodeSettings.Empty;
 
+        public List<Category> setWarningPercent { get; set; } = new List<Category>();
+
         #region Direct Properties
 
         /// <summary>

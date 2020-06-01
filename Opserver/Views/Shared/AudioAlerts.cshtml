@@ -1,0 +1,55 @@
+﻿@using StackExchange.Opserver.Data.SQL
+@{
+    Layout = null;
+
+
+    var audioAlerts = new List<string>();
+
+    var setWarningList = new Dictionary<string, decimal?>();
+
+    foreach (var instance in SQLModule.StandaloneInstances)
+    {
+        if (setWarningList.ContainsKey(instance.Name))
+        {
+            setWarningList[instance.Name] = Current.Settings.Dashboard.CPUWarningPercent;
+        }
+        else
+        {
+            setWarningList.Add(instance.Name, Current.Settings.Dashboard.CPUWarningPercent);
+        }
+    }
+
+    foreach (var i in Current.Settings.Dashboard.setWarningPercent)
+    {
+        if (i.CPUWarningPercent >= 0)
+        {
+            if (setWarningList.ContainsKey(i.Name))
+            {
+                setWarningList[i.Name] = i.CPUWarningPercent;
+            }
+        }
+    }
+
+    foreach (var instance in SQLModule.StandaloneInstances)
+    {
+        if (instance.CurrentCPUPercent >= setWarningList[instance.Name])
+        {
+            audioAlerts.Add(instance.Name);
+        }
+    }
+
+}
+<div class="audioAlerts">
+
+
+    @if (audioAlerts.Any())
+    {
+        foreach (var audioAlert in audioAlerts)
+        {
+            <audio controls="" muted>
+                <source src="~/content/audio/@(audioAlert).mp3" type="audio/mpeg" />
+            </audio>
+        }
+    }
+
+</div>

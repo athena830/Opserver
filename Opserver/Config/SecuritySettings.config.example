@@ -9,4 +9,8 @@
 <!-- 
 Example of global access for everyone:
 <SecuritySettings provider="alladmin" />
+
+Example of using ad need account info:
+<SecuritySettings provider="AD" server="10.0.0.0" authUser="user" authPassword="pwd">
+</SecuritySettings>
 -->
